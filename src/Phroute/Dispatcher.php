@@ -44,6 +44,8 @@ class Dispatcher {
      */
     public function dispatch($httpMethod, $uri)
     {
+        list($uri, $selectors) = $this->explodeSelectors($uri);
+     
         list($handler, $filters, $vars) = $this->dispatchRoute($httpMethod, trim($uri, '/'));
 
         list($beforeFilter, $afterFilter) = $this->parseFilters($filters);
@@ -54,12 +56,38 @@ class Dispatcher {
         }
         
         $resolvedHandler = $this->handlerResolver->resolve($handler);
-        
+        array_push ($vars, $selectors);
         $response = call_user_func_array($resolvedHandler, $vars);
 
         return $this->dispatchFilters($afterFilter, $response);
     }
 
+    /**
+     * Add selectors (eg. ?deleted=true to called function as argument)
+     *
+     * @param $uri
+     * @return array|url, array of selectors
+     */
+    private function explodeSelectors($uri){
+        if(strpos($uri,'?') !== false){
+            list($url, $selectors) = explode("?", $_SERVER['REQUEST_URI']);
+            
+            $arrayOfFilters = explode("&", $selectors);
+            $asArrayOfFilters = Array();
+            for( $i=0; $i<count($arrayOfFilters); $i++){
+                list($key, $value) = explode("=", $arrayOfFilters[$i]);
+                $asArrayOfFilters[$key] = $value;
+            }   
+
+            $selectors = $asArrayOfFilters;
+        
+            return array($url, $selectors);
+
+         }else{
+            return array($uri, array());
+         }
+
+    }
     /**
      * Dispatch a route filter.
      *
@@ -186,6 +214,7 @@ class Dispatcher {
         {
             if (!preg_match($data['regex'], $uri, $matches))
             {
+            
                 continue;
             }
 
@@ -202,6 +231,7 @@ class Dispatcher {
 
             foreach (array_values($routes[$httpMethod][2]) as $i => $varName)
             {
+
                 if(!isset($matches[$i + 1]) || $matches[$i + 1] === '')
                 {
                     unset($routes[$httpMethod][2][$varName]);

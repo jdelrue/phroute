@@ -59,10 +59,17 @@ class RouteParser {
      * Parse a route returning the correct data format to pass to the dispatch engine.
      *
      * @param $route
-     * @return array
+     * @return ?
      */
     public function parse($route)
     {
+        if (strpos($route, '{selectors}') == false) {
+            $route .= '/{selectors}?';
+        }else if (strpos($route, '{selectors}?') == false) {
+            $route = str_replace('{selectors}', '{selectors}?', $route);
+        }
+
+        
         $this->reset();
         
         $route = strtr($route, $this->regexShortcuts);
@@ -106,7 +113,6 @@ class RouteParser {
         }
 
         $this->staticParts($route, strlen($route));
-
         return [[implode('', $this->parts), $this->variables], array_values($this->reverseParts)];
     }
 

@@ -1,11 +1,15 @@
 <?php
 
+
+
 namespace Phroute\Phroute\Dispatcher;
 
 use Phroute\Phroute\RouteCollector;
 use Phroute\Phroute\RouteParser;
 use Phroute\Phroute\Dispatcher;
 use Phroute\Phroute\Route;
+
+include __DIR__ . '/../../vendor/autoload.php';
 
 class Test {
     
@@ -76,6 +80,7 @@ class Test {
 
     public function getParameterOptional($param = 'default')
     {
+        echo "ok";
         return $param;
     }
 

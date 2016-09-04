@@ -169,6 +169,7 @@ class RouteCollector implements RouteDataProviderInterface {
      */
     private function addVariableRoute($httpMethod, $routeData, $handler, $filters)
     {
+
         list($regex, $variables) = $routeData;
 
         if (isset($this->regexToRoutesMap[$regex][$httpMethod]))
