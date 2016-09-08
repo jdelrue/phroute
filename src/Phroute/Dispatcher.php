@@ -57,6 +57,8 @@ class Dispatcher {
         
         $resolvedHandler = $this->handlerResolver->resolve($handler);
         array_push ($vars, $selectors);
+        $data = file_get_contents('php://input');
+        array_push ($vars, $data);
         $response = call_user_func_array($resolvedHandler, $vars);
 
         return $this->dispatchFilters($afterFilter, $response);

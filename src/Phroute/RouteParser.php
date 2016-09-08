@@ -63,13 +63,20 @@ class RouteParser {
      */
     public function parse($route)
     {
+        //Add selectors
         if (strpos($route, '{selectors}') == false) {
             $route .= '/{selectors}?';
         }else if (strpos($route, '{selectors}?') == false) {
             $route = str_replace('{selectors}', '{selectors}?', $route);
         }
 
-        
+           //Add data
+        if (strpos($route, '{data}') == false) {
+            $route .= '/{data}?';
+        }else if (strpos($route, '{data}?') == false) {
+            $route = str_replace('{data}', '{data}?', $route);
+        }
+
         $this->reset();
         
         $route = strtr($route, $this->regexShortcuts);
