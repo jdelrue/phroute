@@ -55,10 +55,15 @@ class Dispatcher {
             return $response;
         }
         
+        if(method_exists($handler[0], "setData")){
+            $handler[0]->setData(file_get_contents('php://input'));
+        }
+        if(method_exists($handler[0], "setSelectors")){
+            $handler[0]->setSelectors($selectors);
+        }
+        
         $resolvedHandler = $this->handlerResolver->resolve($handler);
-        array_push ($vars, $selectors);
-        $data = file_get_contents('php://input');
-        array_push ($vars, $data);
+
         $response = call_user_func_array($resolvedHandler, $vars);
 
         return $this->dispatchFilters($afterFilter, $response);
