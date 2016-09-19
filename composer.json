@@ -1,5 +1,5 @@
 {
-  "name": "xud/phroute",
+  "name": "jdelrue/phroute",
   "description": "Fast, fully featured restful request router for PHP",
   "keywords": ["routing", "router"],
   "license": "BSD-3-Clause",
