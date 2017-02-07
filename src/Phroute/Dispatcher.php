@@ -77,7 +77,7 @@ class Dispatcher {
      */
     private function explodeSelectors($uri){
         if(strpos($uri,'?') !== false){
-            list($url, $selectors) = explode("?", $_SERVER['REQUEST_URI']);
+            list($url, $selectors) = explode("?", $uri);
             
             $arrayOfFilters = explode("&", $selectors);
             $asArrayOfFilters = Array();
